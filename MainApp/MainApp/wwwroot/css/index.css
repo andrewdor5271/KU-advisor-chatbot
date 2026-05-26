@@ -1,0 +1,101 @@
+﻿.layout-spacer {
+    display: flex;
+    width: 100dvw;
+}
+
+.chatbox-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    width: 80%;
+    position: relative;
+    letter-spacing: 0.5px;
+}
+
+.msg-inbox {
+    border: 1px solid #ccc;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.5rem 0.3rem;
+    min-height: 0;
+}
+
+.msg-page {
+    overflow-y: scroll;
+    min-height: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    padding: 1rem 0 0;
+    flex: 1;
+}
+
+
+    .message.received {
+        display: grid;
+        grid-template-columns: 1fr minmax(0, 50%);
+    }
+
+    .message.sent {
+        display: grid;
+        grid-template-columns: minmax(0, 50%) 1fr;
+    }
+
+
+.msg-text {
+    margin-left: 1rem;
+}
+
+.message.received .msg-text {
+    grid-column: 1;
+    justify-self: start;
+}
+
+.message.sent .msg-text {
+    grid-column: 2;
+    justify-self: end;
+}
+
+.msg-text > p {
+    background: #414141 none repeat scroll 0 0;
+    border-radius: 0.6rem;
+    color: white;
+    padding: 1rem;
+    width: 100%;
+    margin-bottom: 0;
+    overflow-wrap: break-word;
+}
+
+.new-msg-input {
+    display: flex;
+    padding: 0.1rem;
+    margin: 0 0 0 0;
+}
+
+.time {
+    color: #777;
+    display: block;
+    font-size: 0.7rem;
+    padding-left: 0.5rem;
+}
+
+.conversation-container{
+
+}
+
+.conversation-button {
+    min-width: 12rem;
+    
+    margin: 0.1rem 0.2rem 0.2rem 0.2rem;
+    padding: 0.3rem 0.2rem 0.3rem 0.3rem;
+    border-radius: 0.4rem;
+}
+
+.conversation-button:hover {
+    background-color: #D3D3D3;
+}
