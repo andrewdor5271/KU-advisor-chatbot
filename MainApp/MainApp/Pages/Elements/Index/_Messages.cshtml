@@ -1,0 +1,43 @@
+﻿@page
+@using MainApp.Models
+@model MainApp.Pages.Elements.Index.MessagesPageModel
+@{
+    Layout = null;
+}
+<!--ATTENTION. REVERSE ORDER due to column-reverse in index.cshtml-->
+
+
+@foreach (var message in Model.Messages)
+{
+    @if (message.SenderType == SenderType.User)
+    {
+        <div class="message sent">
+            <div class="msg-text">
+                <p>
+                    @message.Text
+                </p>
+                <span class="time">@message.CreationDatetime </span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="message received">
+            <div class="msg-text">
+                <p>
+                    @message.Text
+                </p>
+                <span class="time">@message.CreationDatetime </span>
+            </div>
+        </div>
+    }
+}
+
+@if (Model.LastLoadedMessageId - 1 > 0)
+{
+    <div hx-get="/Elements/Index/_Messages?ConversationId=@Model.ConversationId&PreviousMessageId=@Model.LastLoadedMessageId"
+         hx-trigger="intersect once"
+         hx-swap="outerHTML">
+        Loading...
+    </div>
+}

@@ -8,4 +8,10 @@
             return $"LEN(LTRIM(RTRIM({VarName}))) > 0";
         }
     }
+
+    public static class Consts
+    {
+        public const int MESSAGE_BATCH_SIZE = 32;
+    }
 }
+
