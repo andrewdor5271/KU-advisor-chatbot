@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.Swift;
 
 namespace MainApp.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexPageModel : PageModel
     {
         public int ConversationId { get; private set; }
         public void OnGet(int ConversationID)

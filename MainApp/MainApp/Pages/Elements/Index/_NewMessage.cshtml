@@ -1,0 +1,14 @@
+﻿@page
+@model MainApp.Pages.Elements.Index.NewMessagePageModel
+@{
+    Layout = null;
+}
+
+<div class="message sent">
+    <div class="msg-text">
+        <p>
+            @Model.Message.Text
+        </p>
+        <span class="time">@Model.Message.CreationDatetime </span>
+    </div>
+</div>

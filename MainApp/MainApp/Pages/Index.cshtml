@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model IndexPageModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -12,20 +12,28 @@
     <div class="chatbox-container">
          
         <div class="msg-inbox">
-            <div class="msg-page"
-                 hx-get="/Elements/Index/_Messages?ConversationId=@Model.ConversationId"
-            hx-trigger="load">
+            <div id="msg-page"
+                class="msg-page"
+                hx-get="/Elements/Index/_Messages?ConversationId=@Model.ConversationId"
+                hx-trigger="load">
                 
             </div>
         
         </div>
-                
-        <div class="new-msg-input">
-            <input type="text" class="form-control" placeholder="Write message...">
+        
+        <!-- afterbegin because reverse order in msg-page -->
+        <form class="new-msg-input"
+            hx-post="/Elements/Index/_NewMessage"
+            hx-target="#msg-page"
+            hx-swap="afterbegin"  
+            hx-on::after-request="this.reset()"
+              hx-vals='{"ConversationId":@Model.ConversationId}'>
+            @Html.AntiForgeryToken()
+            <input name="Text" type="text" class="form-control" placeholder="Write message...">
             <span class="input-group-text">
-                <i class="bi bi-send"></i>
+                <button class="bi bi-send"></button>
             </span>
-        </div>
+        </form>
                 
     </div>
     
