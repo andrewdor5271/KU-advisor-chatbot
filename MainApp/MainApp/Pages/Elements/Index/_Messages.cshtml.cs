@@ -1,6 +1,6 @@
 using MainApp.Data;
 using MainApp.Models;
-
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +16,7 @@ namespace MainApp.Pages.Elements.Index
         
         public MessagesPageModel(ApplicationDbContext db) 
         { 
-            _db = db;
+            this._db = db;
         }
         public async Task OnGetAsync(int ConversationId, int? PreviousMessageId)
         {

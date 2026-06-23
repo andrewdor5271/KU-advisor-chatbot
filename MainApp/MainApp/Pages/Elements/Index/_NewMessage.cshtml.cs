@@ -7,7 +7,7 @@ namespace MainApp.Pages.Elements.Index
 {
     public class NewMessagePageModel : PageModel
     {
-        private ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
         public Message Message { get; private set; } = null!;
         public NewMessagePageModel(ApplicationDbContext db)
         { 

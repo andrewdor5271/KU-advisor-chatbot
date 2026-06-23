@@ -68,15 +68,22 @@ using (var scope = app.Services.CreateScope())
 
         await userManager.CreateAsync(user, "1234567");
 
-        var Conv = new MainApp.Models.Conversation
+        var Conv1 = new MainApp.Models.Conversation
         {
             UserId = user.Id,
             Title = "Test 1",
             CreationDatetime = DateTime.Now,
 
         };
+        var Conv2 = new MainApp.Models.Conversation
+        {
+            UserId = user.Id,
+            Title = "Test 2",
+            CreationDatetime = DateTime.Now,
 
-        db.Conversations.Add(Conv);
+        };
+
+        db.Conversations.AddRange(Conv1, Conv2);
         db.SaveChanges();
 
         for (int i = 0; i < 48; i++) {
@@ -86,10 +93,26 @@ using (var scope = app.Services.CreateScope())
                     Text = $"Test {i + 1}",
                     CreationDatetime = DateTime.Now,
                     SenderType = i % 2 == 0 ? MainApp.Models.SenderType.User: MainApp.Models.SenderType.Bot,
-                    ConversationId = Conv.ConversationId
+                    ConversationId = Conv1.ConversationId
                 }
             );
         }
+        db.Messages.AddRange(
+                new MainApp.Models.Message
+                {
+                    Text = "aga",
+                    CreationDatetime = DateTime.Now,
+                    SenderType = MainApp.Models.SenderType.User,
+                    ConversationId = Conv2.ConversationId
+                },
+                new MainApp.Models.Message
+                {
+                    Text = "ogo",
+                    CreationDatetime = DateTime.Now,
+                    SenderType = MainApp.Models.SenderType.Bot,
+                    ConversationId = Conv2.ConversationId
+                }
+            );
         db.SaveChanges();
     }
 }

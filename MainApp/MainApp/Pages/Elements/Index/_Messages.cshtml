@@ -33,10 +33,10 @@
     }
 }
 
-@if (Model.LastLoadedMessageId - 1 > 0)
+@if (Model.Messages.Count() >= Consts.MESSAGE_BATCH_SIZE)
 {
     <div hx-get="/Elements/Index/_Messages?ConversationId=@Model.ConversationId&PreviousMessageId=@Model.LastLoadedMessageId"
-         hx-trigger="intersect once"
+         hx-trigger="intersect"
          hx-swap="outerHTML">
         Loading...
     </div>

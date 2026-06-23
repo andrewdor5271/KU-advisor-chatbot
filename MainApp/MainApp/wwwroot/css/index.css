@@ -24,7 +24,6 @@
 
 .msg-page {
     overflow-y: scroll;
-    min-height: 0;
     flex: 1;
     display: flex;
     flex-direction: column-reverse;
@@ -32,7 +31,6 @@
 
 .message {
     padding: 1rem 0 0;
-    flex: 1;
 }
 
 
@@ -49,6 +47,7 @@
 
 .msg-text {
     margin-left: 1rem;
+    min-height: 0;
 }
 
 .message.received .msg-text {
