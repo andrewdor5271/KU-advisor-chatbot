@@ -9,39 +9,16 @@
         @foreach (var conversation in Model.Conversations)
         {
             <div class="conversation-button"
-                    hx-get="/Elements/Index/_Messages?ConversationId=@conversation.ConversationId"
-                    hx-target="#msg-page"
-                    hx-trigger="click">
+            hx-get="/Elements/Index/_Messages?ConversationId=@conversation.ConversationId"
+            hx-target="#chatbox-container"
+            hx-trigger="click">
                 @conversation.Title
             </div>
         }
     </div>
-    <div class="chatbox-container">
-        
-        <!-- Fails when not logged in because no cookies yet -->
-        <div class="msg-inbox">
-            <div id="msg-page"
-                class="msg-page"
-                hx-get="/Elements/Index/_Messages?ConversationId=@Model.Conversations.First().ConversationId"
-                hx-trigger="load">
-                
-            </div>
-        
-        </div>
-        
-        <!-- afterbegin because reverse order in msg-page -->
-        <form class="new-msg-input"
-            hx-post="/Elements/Index/_NewMessage"
-            hx-target="#msg-page"
-            hx-swap="afterbegin"  
-            hx-on::after-request="this.reset()"
-              hx-vals='{"ConversationId":@Model.ConversationId}'>
-            @Html.AntiForgeryToken()
-            <input name="Text" type="text" class="form-control" placeholder="Write message...">
-            <span class="input-group-text">
-                <button class="bi bi-send"></button>
-            </span>
-        </form>
+    <div class="chatbox-container"
+         hx-get="/Elements/Index/_Messages?ConversationId=@Model.Conversations.First().ConversationId"
+         hx-trigger="load">
                 
     </div>
     

@@ -70,19 +70,18 @@ using (var scope = app.Services.CreateScope())
 
         var Conv1 = new MainApp.Models.Conversation
         {
-            UserId = user.Id,
             Title = "Test 1",
             CreationDatetime = DateTime.Now,
 
         };
+        Conv1.SetUserId(user.Id);
         var Conv2 = new MainApp.Models.Conversation
         {
-            UserId = user.Id,
             Title = "Test 2",
             CreationDatetime = DateTime.Now,
 
         };
-
+        Conv2.SetUserId(user.Id);
         db.Conversations.AddRange(Conv1, Conv2);
         db.SaveChanges();
 

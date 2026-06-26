@@ -11,6 +11,7 @@ namespace MainApp.Data
         // this describes what we actually store in the db
         public DbSet<Conversation> Conversations => Set<Conversation>();
         public DbSet<Message> Messages => Set<Message>();
+        public DbSet<AnonUser> AnonUsers => Set<AnonUser>();
 
         // this is the constraints galore generator
         protected override void OnModelCreating(ModelBuilder builder)
@@ -51,12 +52,17 @@ namespace MainApp.Data
             builder.Entity<Conversation>()
             .HasKey(t => t.ConversationId);
 
-            // relation between User and Conversation
+            // relation between IdentityUser and Conversation
             builder.Entity<Conversation>()
-            .HasOne(t => t.User)
+            .HasOne(t => t.IdentityUser)
             .WithMany()
-            .HasForeignKey(t => t.UserId)
-            .IsRequired();
+            .HasForeignKey(t => t.IdentityUserId);
+
+            // relation between AnonUser and Conversation
+            builder.Entity<Conversation>()
+            .HasOne(t => t.AnonUser)
+            .WithMany()
+            .HasForeignKey(t => t.AnonUserId);
         }
 
 

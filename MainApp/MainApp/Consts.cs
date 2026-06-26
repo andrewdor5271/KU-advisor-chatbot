@@ -12,6 +12,8 @@
     public static class Consts
     {
         public const int MESSAGE_BATCH_SIZE = 32;
+        public const string ANON_ID_COOKIE_NAME = "anon_id";
+        public const int ANON_ID_COOKIE_EXPIRATION_PERIOD = 30;
     }
 }
 
