@@ -1,3 +1,4 @@
+using MainApp;
 using MainApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -71,14 +72,14 @@ using (var scope = app.Services.CreateScope())
         var Conv1 = new MainApp.Models.Conversation
         {
             Title = "Test 1",
-            CreationDatetime = DateTime.Now,
+            CreationDatetime = DateTime.UtcNow,
 
         };
         Conv1.SetUserId(user.Id);
         var Conv2 = new MainApp.Models.Conversation
         {
             Title = "Test 2",
-            CreationDatetime = DateTime.Now,
+            CreationDatetime = DateTime.UtcNow,
 
         };
         Conv2.SetUserId(user.Id);
@@ -91,7 +92,7 @@ using (var scope = app.Services.CreateScope())
                 {
                     Text = $"Test {i + 1}",
                     CreationDatetime = DateTime.Now,
-                    SenderType = i % 2 == 0 ? MainApp.Models.SenderType.User: MainApp.Models.SenderType.Bot,
+                    SenderType = i % 2 == 0 ? SenderType.User: SenderType.Bot,
                     ConversationId = Conv1.ConversationId
                 }
             );
@@ -101,14 +102,14 @@ using (var scope = app.Services.CreateScope())
                 {
                     Text = "aga",
                     CreationDatetime = DateTime.Now,
-                    SenderType = MainApp.Models.SenderType.User,
+                    SenderType = SenderType.User,
                     ConversationId = Conv2.ConversationId
                 },
                 new MainApp.Models.Message
                 {
                     Text = "ogo",
                     CreationDatetime = DateTime.Now,
-                    SenderType = MainApp.Models.SenderType.Bot,
+                    SenderType = SenderType.Bot,
                     ConversationId = Conv2.ConversationId
                 }
             );

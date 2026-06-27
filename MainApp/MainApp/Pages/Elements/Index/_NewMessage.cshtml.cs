@@ -1,10 +1,12 @@
 using MainApp.Data;
+using MainApp.Infrastructure.Authentication;
 using MainApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MainApp.Pages.Elements.Index
 {
+    [BimodalAuthentify]
     public class NewMessagePageModel : PageModel
     {
         private readonly ApplicationDbContext _db;

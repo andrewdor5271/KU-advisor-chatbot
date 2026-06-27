@@ -6,15 +6,7 @@
 
 <div class="layout-spacer">
     <div class="conversation-container">
-        @foreach (var conversation in Model.Conversations)
-        {
-            <div class="conversation-button"
-            hx-get="/Elements/Index/_Messages?ConversationId=@conversation.ConversationId"
-            hx-target="#chatbox-container"
-            hx-trigger="click">
-                @conversation.Title
-            </div>
-        }
+        
     </div>
     <div class="chatbox-container"
          hx-get="/Elements/Index/_Messages?ConversationId=@Model.Conversations.First().ConversationId"

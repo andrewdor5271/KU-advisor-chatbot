@@ -1,5 +1,18 @@
 ﻿namespace MainApp
 {
+    public enum UserType
+    {
+        None,
+        AnonUser,
+        IdentityUser
+    }
+
+    public enum SenderType
+    {
+        User,
+        Bot
+    }
+
     public static class GlobalStrings
     {
         public static string NonEmptyStringConstraint(String VarName)
@@ -12,8 +25,13 @@
     public static class Consts
     {
         public const int MESSAGE_BATCH_SIZE = 32;
+
         public const string ANON_ID_COOKIE_NAME = "anon_id";
         public const int ANON_ID_COOKIE_EXPIRATION_PERIOD = 30;
+
+        public const string AUTH_CONTEXT_USER_TYPE_KEY = "user_type";
+        public const string AUTH_CONTEXT_IDENTITY_USER_KEY = "identity_user";
+        public const string AUTH_CONTEXT_ANON_USER_KEY = "anon_user";
     }
 }
 

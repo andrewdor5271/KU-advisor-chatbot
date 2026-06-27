@@ -1,0 +1,15 @@
+﻿@page
+@model MainApp.Pages.Elements.Index.ConversationsPageModel
+@{
+    Layout = null;
+}
+
+@foreach (var conversation in Model.Conversations)
+{
+    <div class="conversation-button"
+         hx-get="/Elements/Index/_Messages?ConversationId=@conversation.ConversationId"
+         hx-target="#chatbox-container"
+         hx-trigger="click">
+        @conversation.Title
+    </div>
+}

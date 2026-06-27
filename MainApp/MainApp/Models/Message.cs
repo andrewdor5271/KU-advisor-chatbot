@@ -3,11 +3,6 @@
 
 namespace MainApp.Models
 {
-    public enum SenderType
-    {
-        User,
-        Bot
-    }
 
     public class Message
     {
