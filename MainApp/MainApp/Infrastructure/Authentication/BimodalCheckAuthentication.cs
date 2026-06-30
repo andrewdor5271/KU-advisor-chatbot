@@ -87,7 +87,7 @@ namespace MainApp.Infrastructure.Authentication
             else if (anonUser != null)
             {
                 userType = UserType.AnonUser;
-                context.HttpContext.Items[Consts.AUTH_CONTEXT_IDENTITY_USER_KEY] = anonUser;
+                context.HttpContext.Items[Consts.AUTH_CONTEXT_ANON_USER_KEY] = anonUser;
 
                 this.UpdateAnonCookie(context.HttpContext.Response, anonUser);
             }

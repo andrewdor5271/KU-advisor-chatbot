@@ -32,6 +32,8 @@
         public const string AUTH_CONTEXT_USER_TYPE_KEY = "user_type";
         public const string AUTH_CONTEXT_IDENTITY_USER_KEY = "identity_user";
         public const string AUTH_CONTEXT_ANON_USER_KEY = "anon_user";
+
+        public const string DUMMY_CONVO_DEFAULT_TITLE = "Your conversation";
     }
 }
 

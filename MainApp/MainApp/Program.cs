@@ -1,5 +1,6 @@
 using MainApp;
 using MainApp.Data;
+using MainApp.Infrastructure.Conversations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,10 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder.Services.AddRazorPages();
+
+
+// custom service for convo management can now be dependency injected everywhere
+builder.Services.AddScoped<IConversationsService, ConversationsService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

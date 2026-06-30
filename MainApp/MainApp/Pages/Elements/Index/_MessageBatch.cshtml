@@ -1,0 +1,40 @@
+﻿@page
+@model MessageBatchPageModel
+@{
+    Layout = null;
+}
+
+@foreach (var message in Model.Messages)
+{
+    @if (message.SenderType == SenderType.User)
+    {
+        <div class="message sent">
+            <div class="msg-text">
+                <p>
+                    @message.Text
+                </p>
+                <span class="time">@message.CreationDatetime </span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="message received">
+            <div class="msg-text">
+                <p>
+                    @message.Text
+                </p>
+                <span class="time">@message.CreationDatetime </span>
+            </div>
+        </div>
+    }
+}
+
+@if (Model.LastLoadedMessageId != null)
+{
+    <div hx-get="/Elements/Index/_MessageBatch?ConversationId=@Model.ConversationId&PreviousMessageId=@Model.LastLoadedMessageId"
+    hx-trigger="intersect once"
+    hx-swap="outerHTML">
+        Loading...
+    </div>
+}

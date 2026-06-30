@@ -1,49 +1,42 @@
 using MainApp.Data;
 using MainApp.Infrastructure.Authentication;
+using MainApp.Infrastructure.Page;
 using MainApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainApp.Pages.Elements.Index
 {
-    [BimodalAuthentify]
-    public class MessagesPageModel : PageModel
+    [BimodalCheckAuthentication]
+    public class MessagesPageModel : BimodalAuthMessagePageModel
     {
-        private readonly ApplicationDbContext _db = null!;
-        public List<Message> Messages { get; private set; } = [];
         public int ConversationId { get; private set; }
-        public int PreviousMessageId { get; private set; }
-        public int LastLoadedMessageId { get; private set; }
-        
-        public MessagesPageModel(ApplicationDbContext db) 
-        { 
-            this._db = db;
-        }
-        public async Task OnGetAsync(int ConversationId, int? PreviousMessageId)
+
+        public UserType UserType { get; private set; }
+        public MessagesPageModel(ApplicationDbContext db) : base(db)
         {
+            
+        }
 
-            // the messages are supposed to be displayed from the bottom to the top
-            this.ConversationId = ConversationId;
+        public async Task<IActionResult> OnGetAsync(int? conversationId, int? previousMessageId)
+        {
+            this.UserType = (UserType)HttpContext.Items[Consts.AUTH_CONTEXT_USER_TYPE_KEY]!;
 
-            var Query = _db.Messages.Where(t => t.ConversationId == ConversationId);
-            if (PreviousMessageId != null) {
-                this.PreviousMessageId = (int)PreviousMessageId;
-                Query = Query.Where(t => t.MessageId < PreviousMessageId); // apply cursor when it's not the first page
-            }
-
-            this.Messages = await Query
-                .OrderByDescending(t => t.MessageId) // We want the newest message to be the first because of css column reversal shit
-                .Take(Consts.MESSAGE_BATCH_SIZE)
-                .ToListAsync();
-
-            if(Messages.Count > 0) {
-                this.LastLoadedMessageId = Messages.Last().MessageId; // the oldest message id for further loading
-            }
-            else
+            if (conversationId == null)
             {
-                this.LastLoadedMessageId = this.PreviousMessageId;
+                // we assume that it's a dummy page for new users
+                return Page();
             }
+
+            this.ConversationId = (int)conversationId;
+            if(!await CheckMessagesSecurityAsync(this.ConversationId))
+            {
+                return Forbid();
+            }
+
+            return Page();
         }
     }
 }

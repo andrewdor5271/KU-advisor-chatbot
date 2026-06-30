@@ -4,14 +4,28 @@
     ViewData["Title"] = "Home page";
 }
 
+<!-- conversation-created is a custom event triggered by return of _NewMessage -->
 <div class="layout-spacer">
-    <div class="conversation-container">
-        
+    <div id ="conversation-container"
+         class="conversation-container"
+         hx-get="/Elements/Index/_Conversations"
+         hx-trigger="load, conversation-created from:body">
+        <!-- User will be loaded by BimodalCheckAuthentication -->
     </div>
     <div class="chatbox-container"
-         hx-get="/Elements/Index/_Messages?ConversationId=@Model.Conversations.First().ConversationId"
-         hx-trigger="load">
-                
+         id="chatbox-container">
+        
     </div>
     
 </div>
+
+<!-- Trigger for selecting the first convo in the list on load -->
+<script>
+    document.body.addEventListener("htmx:afterSettle", function (e) {
+        console.log("AGAHIII");
+        if (e.target.id === "conversation-container") {
+            // document.getElementById("Conv_0").click();
+            htmx.trigger("#Conv_0", "click");
+        }
+    });
+</script>

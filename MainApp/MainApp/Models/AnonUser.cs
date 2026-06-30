@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
+using System.Text.Json.Serialization;
 
 namespace MainApp.Models
 {   
@@ -28,6 +29,13 @@ namespace MainApp.Models
         {
             this.AnonUserId = user.AnonUserId;
             this.PublicToken = user.PublicToken;
+        }
+
+        [JsonConstructor]
+        public AnonUserCookieModel(int anonUserId, String publicToken)
+        {
+            this.AnonUserId = anonUserId;
+            this.PublicToken = publicToken;
         }
     }
 }

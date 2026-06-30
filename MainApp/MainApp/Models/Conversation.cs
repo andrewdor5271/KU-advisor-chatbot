@@ -26,7 +26,7 @@ namespace MainApp.Models
         // set corresponding user with checks
         public void SetUserId(String? identityUserId= null, int? anonUserId = null)
         {
-            if (identityUserId == null && AnonUser == null)
+            if (identityUserId == null && anonUserId == null)
             {
                 throw new ArgumentNullException();
             }

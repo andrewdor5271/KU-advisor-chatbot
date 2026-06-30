@@ -18,17 +18,12 @@ namespace MainApp.Infrastructure.Authentication
 
         protected async Task CreateAnonAsync(HttpContext context)
         {
-            AnonUser newAnonUser = new AnonUser();
             DateTime creationDateTime = DateTime.UtcNow;
-            Conversation firstConversation = new Conversation
-            {
-                Title = "Your conversation",
-                CreationDatetime = creationDateTime,
-                LastChangeDatetime = creationDateTime
-            };
-            firstConversation.SetUser(null, newAnonUser);
+            AnonUser newAnonUser = new AnonUser();
+            newAnonUser.CreationDatetime = creationDateTime;
+            newAnonUser.LastChangeDatetime = creationDateTime;
+            
             this._db.AnonUsers.Add(newAnonUser);
-            this._db.Conversations.Add(firstConversation);
 
             await this._db.SaveChangesAsync();
 
