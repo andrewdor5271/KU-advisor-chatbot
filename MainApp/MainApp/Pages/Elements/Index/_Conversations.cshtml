@@ -2,13 +2,18 @@
 @model MainApp.Pages.Elements.Index.ConversationsPageModel
 @{
     Layout = null;
+    int i = 0;
 }
+
+<div id="af-token" display="hidden">
+    @Html.AntiForgeryToken()
+</div>
 
 @if (Model.Conversations.Count == 0)
 {
     <!-- Dummy convo for future creation - just an empty message page -->
     <div class="conversation-button"
-         id="Conv_0"
+         id="Conv_Target"
          hx-get="/Elements/Index/_Messages"
          hx-target="#chatbox-container"
          hx-trigger="click">
@@ -17,7 +22,13 @@
 }
 else
 {
-    @for (int i = 0; i < Model.Conversations.Count; i++)
+    <button class="btn btn-info new-conversation-button"
+            hx-post="/Elements/Index/_NewConversation"
+            hx-swap="afterend"
+            hx-include="#af-token">
+        @Consts.CREATE_CONVO_BUTTON_TEXT
+    </button>
+    @for (i = 0; i < Model.Conversations.Count; i++)
     {
         <div class="conversation-button"
              id="Conv_@i"

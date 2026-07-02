@@ -19,13 +19,21 @@
     
 </div>
 
-<!-- Trigger for selecting the first convo in the list on load -->
+<!-- Trigger for selecting the first convo in the list on load 
+    And a global Anti-forgery token setup
+-->
 <script>
     document.body.addEventListener("htmx:afterSettle", function (e) {
-        console.log("AGAHIII");
         if (e.target.id === "conversation-container") {
             // document.getElementById("Conv_0").click();
-            htmx.trigger("#Conv_0", "click");
+            if (!!document.getElementById("Conv_Target"))
+            {
+                htmx.trigger("#Conv_Target", "click");
+            }
+            else
+            {
+                htmx.trigger("#Conv_0", "click");
+            }
         }
     });
 </script>

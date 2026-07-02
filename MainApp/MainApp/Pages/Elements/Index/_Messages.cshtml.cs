@@ -12,7 +12,7 @@ namespace MainApp.Pages.Elements.Index
     [BimodalCheckAuthentication]
     public class MessagesPageModel : BimodalAuthMessagePageModel
     {
-        public int ConversationId { get; private set; }
+        public int? ConversationId { get; private set; }
 
         public UserType UserType { get; private set; }
         public MessagesPageModel(ApplicationDbContext db) : base(db)
@@ -24,14 +24,15 @@ namespace MainApp.Pages.Elements.Index
         {
             this.UserType = (UserType)HttpContext.Items[Consts.AUTH_CONTEXT_USER_TYPE_KEY]!;
 
-            if (conversationId == null)
+            this.ConversationId = conversationId;
+            if (this.ConversationId == null)
             {
-                // we assume that it's a dummy page for new users
+                // we assume that it's a dummy page for new convos
                 return Page();
             }
 
-            this.ConversationId = (int)conversationId;
-            if(!await CheckMessagesSecurityAsync(this.ConversationId))
+            
+            if(!await CheckMessagesSecurityAsync((int)this.ConversationId))
             {
                 return Forbid();
             }

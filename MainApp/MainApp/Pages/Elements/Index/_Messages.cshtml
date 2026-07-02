@@ -8,7 +8,7 @@
 
 
 <div class="msg-inbox">
-    @if (Model.UserType == UserType.None)
+    @if (Model.ConversationId == null)
     {
         <div class="msg-page"
         id="msg-page">
@@ -20,7 +20,7 @@
         <div class="msg-page"
              id="msg-page"
              hx-get="/Elements/Index/_MessageBatch?ConversationId=@Model.ConversationId"
-             hx-trigger="load">
+             hx-trigger="intersect root:#chatbox-container once">
         </div>
     }
 </div>

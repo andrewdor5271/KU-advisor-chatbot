@@ -15,6 +15,7 @@ namespace MainApp.Pages.Elements.Index
     {
         private readonly IConversationsService _conversationsService;
         public Message Message { get; private set; } = null!;
+        public bool DummyConvoFlag { get; private set; }
         public NewMessagePageModel(ApplicationDbContext db, IConversationsService conversationsService) : base(db)
         {
             this._conversationsService = conversationsService;
@@ -24,6 +25,7 @@ namespace MainApp.Pages.Elements.Index
             UserType userType = (UserType)HttpContext.Items[Consts.AUTH_CONTEXT_USER_TYPE_KEY]!;
             if(conversationId == null)
             {
+                this.DummyConvoFlag = true;
                 // We need to seriously rearrange the whole page if we create a new convo
                 // Thus, we send back an event - so a lot of HTMX is triggered
                 Response.Headers.Append("HX-Trigger", "conversation-created");
@@ -51,6 +53,10 @@ namespace MainApp.Pages.Elements.Index
             else if(!await CheckMessagesSecurityAsync((int)conversationId))
             {
                 return Forbid();
+            }
+            else
+            {
+                this.DummyConvoFlag = false;
             }
 
             // and here we process everything that's actually not about creating new conversations

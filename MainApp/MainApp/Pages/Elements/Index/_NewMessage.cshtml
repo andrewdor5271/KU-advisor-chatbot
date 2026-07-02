@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-@if (Model.Message != null)
+@if (!Model.DummyConvoFlag)
 {
     <div class="message sent">
         <div class="msg-text">

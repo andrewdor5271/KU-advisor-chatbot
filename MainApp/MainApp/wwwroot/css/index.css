@@ -98,3 +98,10 @@
 .conversation-button:hover {
     background-color: #D3D3D3;
 }
+
+.new-conversation-button {
+    min-width: 12rem;
+    margin: 0.1rem 0.2rem 0.2rem 0.2rem;
+    padding: 0.3rem 0.2rem 0.3rem 0.3rem;
+    border-radius: 0.4rem;
+}

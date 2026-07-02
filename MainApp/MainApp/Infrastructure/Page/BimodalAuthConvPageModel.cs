@@ -15,6 +15,7 @@ namespace MainApp.Infrastructure.Page
         protected readonly ApplicationDbContext _db;
         protected readonly IConversationsService _conversationsService;
         public List<Conversation> Conversations { get; protected set; } = null!;
+        public readonly Conversation DummyConversation;
 
         public BimodalAuthConvPageModel(ApplicationDbContext db, IConversationsService conversationsService) : base()
         {
@@ -29,6 +30,12 @@ namespace MainApp.Infrastructure.Page
 
             this._db = db;
             this._conversationsService = conversationsService;
+            this.DummyConversation = new Conversation
+            {
+                Title = Consts.DUMMY_CONVO_DEFAULT_TITLE,
+                CreationDatetime = DateTime.UtcNow,
+                LastChangeDatetime = DateTime.UtcNow,
+            };
         }
 
         protected async Task LoadConversations(bool validUserCheck=true)

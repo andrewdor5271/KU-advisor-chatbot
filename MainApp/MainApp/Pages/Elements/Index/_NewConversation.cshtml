@@ -1,0 +1,13 @@
+﻿@page
+@model MainApp.Pages.Elements.Index.NewConversationPageModel
+@{
+    Layout = null;
+}
+
+<div class="conversation-button"
+     id="Conv_Target"
+     hx-get="/Elements/Index/_Messages"
+     hx-target="#chatbox-container"
+     hx-trigger="click">
+    @Model.DummyConversation.Title
+</div>

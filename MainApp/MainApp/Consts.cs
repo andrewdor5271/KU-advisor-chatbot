@@ -34,6 +34,7 @@
         public const string AUTH_CONTEXT_ANON_USER_KEY = "anon_user";
 
         public const string DUMMY_CONVO_DEFAULT_TITLE = "Your conversation";
+        public const string CREATE_CONVO_BUTTON_TEXT = "New conversation";
     }
 }
 
