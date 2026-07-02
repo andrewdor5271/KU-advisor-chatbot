@@ -1,5 +1,4 @@
 ﻿@page
-@using MainApp.Infrastructure.Page
 @model IndexPageModel
 @{
     ViewData["Title"] = "Home page";
@@ -8,11 +7,7 @@
 <!-- conversation-created is a custom event triggered by return of _NewMessage -->
 <div class="layout-spacer">
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <a class="sidebar-button @ViewContext.IsActive("/")" asp-page="/">Main page</a>
-            <a class="sidebar-button @ViewContext.IsActive("/KnowledgeBase")" asp-page="/KnowledgeBase">Knowledge base</a>
-            <a class="sidebar-button @ViewContext.IsActive("/FAQ")" asp-page="/FAQ">Frequently asked</a>
-        </div>
+        <partial name="/Pages/Elements/GlobalPartials/_SidebarHeaderPartial.cshtml"/>
         <div id ="conversation-container"
              class="conversation-container"
              hx-get="/Elements/Index/_Conversations"
