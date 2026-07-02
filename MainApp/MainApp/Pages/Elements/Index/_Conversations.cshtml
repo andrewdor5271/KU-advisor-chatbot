@@ -12,7 +12,7 @@
 @if (Model.Conversations.Count == 0)
 {
     <!-- Dummy convo for future creation - just an empty message page -->
-    <div class="conversation-button"
+    <div class="sidebar-button"
          id="Conv_Target"
          hx-get="/Elements/Index/_Messages"
          hx-target="#chatbox-container"
@@ -30,7 +30,7 @@ else
     </button>
     @for (i = 0; i < Model.Conversations.Count; i++)
     {
-        <div class="conversation-button"
+        <div class="sidebar-button"
              id="Conv_@i"
              hx-get="/Elements/Index/_Messages?ConversationId=@Model.Conversations[i].ConversationId"
              hx-target="#chatbox-container"

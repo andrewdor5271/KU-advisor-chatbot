@@ -14,17 +14,19 @@ namespace MainApp.Pages
     [BimodalCheckAuthentication]
     public class IndexPageModel : PageModel
     {
-        // private readonly Conversation dummyConvo 
+        public IdentityUser? IdentityUser { get; private set; } = null;
         public IndexPageModel()
         {
             
         }
         
-        // all the data in the HttpContext comes from the bimodal authentication attribute
-        // at this point I will require authentication because conversation must be created
         public async Task OnGetAsync()
         {
-            
+            UserType userType = (UserType)HttpContext.Items[Consts.AUTH_CONTEXT_USER_TYPE_KEY]!;
+            if(userType == UserType.IdentityUser)
+            {
+                this.IdentityUser = (IdentityUser)HttpContext.Items[Consts.AUTH_CONTEXT_IDENTITY_USER_KEY]!;
+            }
         }
     }
 }

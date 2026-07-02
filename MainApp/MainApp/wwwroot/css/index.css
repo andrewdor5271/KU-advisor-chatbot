@@ -83,11 +83,33 @@
     padding-left: 0.5rem;
 }
 
-.conversation-container{
 
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
 }
 
-.conversation-button {
+.sidebar-header {
+    flex: 0 0 auto;
+    margin-bottom: 0.3rem;
+}
+
+.sidebar-footer {
+    flex: 0 0 auto;
+    margin-top: 0.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.conversation-container {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.sidebar-button {
+    display: block;
+
     min-width: 12rem;
     
     margin: 0.1rem 0.2rem 0.2rem 0.2rem;
@@ -95,13 +117,23 @@
     border-radius: 0.4rem;
 }
 
-.conversation-button:hover {
+    .sidebar-button.active {
+        background-color: #D3D3D3;
+    }
+
+.sidebar-button:not(.active):hover {
     background-color: #D3D3D3;
 }
 
 .new-conversation-button {
     min-width: 12rem;
-    margin: 0.1rem 0.2rem 0.2rem 0.2rem;
+    margin: 0.3rem 0.2rem 0.2rem 0.2rem;
     padding: 0.3rem 0.2rem 0.3rem 0.3rem;
     border-radius: 0.4rem;
+}
+
+.user-box {
+    display: flex;
+    font-size: 1.1rem;
+    align-items: center
 }
