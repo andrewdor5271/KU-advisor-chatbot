@@ -1,13 +1,14 @@
 ﻿@page
+@using MainApp.Pages.Elements.GlobalPartials
 @model MainApp.Pages.Elements.Index.NewConversationPageModel
 @{
     Layout = null;
+    var convModel = new ConversationButtonModel
+    {
+        Id = $"Conv_Target",
+        Url = $"/Elements/Index/_Messages"
+    };
 }
 
-<div class="sidebar-button"
-     id="Conv_Target"
-     hx-get="/Elements/Index/_Messages"
-     hx-target="#chatbox-container"
-     hx-trigger="click">
-    @Model.DummyConversation.Title
-</div>
+<partial name="/Pages/Elements/GlobalPartials/_ConversationButtonPartial.cshtml"
+         model="convModel" />

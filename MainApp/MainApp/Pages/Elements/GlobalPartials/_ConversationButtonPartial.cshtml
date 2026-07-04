@@ -1,0 +1,9 @@
+﻿@model ConversationButtonModel
+
+<div class="sidebar-button"
+     id="@Model.Id"
+     hx-get="@Model.Url"
+     hx-target="#chatbox-container"
+     hx-trigger="click">
+    @Model.Title
+</div>
