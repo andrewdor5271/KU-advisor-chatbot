@@ -84,22 +84,6 @@
 }
 
 
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh;
-}
-
-.sidebar-header {
-    flex: 0 0 auto;
-    margin-bottom: 0.3rem;
-}
-
-.sidebar-footer {
-    flex: 0 0 auto;
-    margin-top: 0.3rem;
-    margin-bottom: 0.4rem;
-}
 
 .conversation-container {
     flex: 1 1 auto;
@@ -108,6 +92,7 @@
 }
 
 .new-conversation-button {
+    width: 98%;
     min-width: 12rem;
     margin: 0.3rem 0.2rem 0.2rem 0.2rem;
     padding: 0.3rem 0.2rem 0.3rem 0.3rem;

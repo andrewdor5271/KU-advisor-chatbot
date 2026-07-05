@@ -56,9 +56,29 @@ footer {
   text-align: start;
 }
 
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    width:15%;
+}
+
+.sidebar-header {
+    flex: 0 0 auto;
+    margin-bottom: 0.3rem;
+}
+
+.sidebar-footer {
+    flex: 0 0 auto;
+    margin-top: 0.3rem;
+    margin-bottom: 0.4rem;
+}
+
+
 .sidebar-button {
-    display: block;
+    display: flex;
     min-width: 12rem;
+    width: 97%;
     margin: 0.1rem 0.2rem 0.2rem 0.2rem;
     padding: 0.3rem 0.2rem 0.3rem 0.3rem;
     border-radius: 0.4rem;

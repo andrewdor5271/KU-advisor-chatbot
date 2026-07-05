@@ -1,0 +1,23 @@
+﻿@page
+@model MainApp.Pages.Elements.Index.FAQDialogBodyPageModel
+@{
+    Layout = null;
+}
+
+@if(Model.IsValidIdentityUser)
+{
+    <form id="FAQ-submit-form"
+          hx-post="/Elements/Index/_FAQDialogBody"
+          hx-vals='{"conversationId" : @Model.ConversationId}'>
+        @Html.AntiForgeryToken()
+        <h4>Please enter a short description</h4>
+        <i>What do you think makes this conversation useful?</i>
+        <input name="description" />
+    </form>
+    
+}
+else
+{
+    <h4>This content is only available to registered users</h4>
+    <h4>Please <a href="/Identity/Account/Login">log in</a> or <a href="/Identity/Account/Register">sign up</a> to proceed</h4>
+}

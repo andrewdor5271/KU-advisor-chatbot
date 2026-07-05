@@ -44,5 +44,27 @@ namespace MainApp.Pages.Elements.Index
             Response.Headers.Append("HX-Trigger", "conversation-change");
             return new NoContentResult();
         }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int conversationId)
+        {
+            Conversation convo;
+            try
+            {
+                convo = await this.LoadConversationAsync(conversationId);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+
+            await this._conversationsService.DeleteAsync(convo.ConversationId);
+
+            Response.Headers.Append("HX-Trigger", "conversation-change");
+            return new NoContentResult();
+        }
     }
 }

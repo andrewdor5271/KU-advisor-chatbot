@@ -4,6 +4,27 @@
     @Html.AntiForgeryToken()
 </div>
 
+<!-- Invisible by default, it is a modal window activated on click-->
+<div class="modal fade" id="FAQ-modal-@Model.HtmlId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add to FAQ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"
+                 hx-get="/Elements/Index/_FAQDialogBody?conversationId=@Model.DatabaseId"
+                 hx-trigger="load">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="FAQ-submit-form" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="sidebar-button"
      id="@Model.HtmlId"
      hx-get="@Model.Url"
@@ -22,9 +43,32 @@
                    value="@Model.Title"
                    readonly
                    ondblclick="this.readOnly=false; this.focus(); this.select();"
-               
                    onblur="this.readOnly = true;">
         </form>
+
+        <!-- Using bootstrap for the dropdown menu because it's pretty much already implemented -->
+        <div class="dropdown ms-auto">
+            <button class="btn btn-sm"
+                    flex="1"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    onclick="event.stopPropagation()">
+                <i class="bi bi-three-dots"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#FAQ-modal-@Model.HtmlId">Add to FAQ</button>
+                </li>
+                <li>
+                    <form hx-post="Elements/Index/_Conversations?handler=Delete"
+                          hx-vals='{"conversationId" : @Model.DatabaseId}'>
+                        @Html.AntiForgeryToken()
+                        <button class="dropdown-item text-danger">Delete</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
      }
      else
      {
