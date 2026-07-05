@@ -10,37 +10,43 @@
     @Html.AntiForgeryToken()
 </div>
 
-@if (Model.Conversations.Count == 0)
+
+@if (Model.Conversations != null)
 {
-    var convModel = new ConversationButtonModel
-    {
-        Id = $"Conv_Target",
-        Url = $"/Elements/Index/_Messages"
-    };
-    <!-- Dummy convo for future creation - just an empty message page -->
-    <partial name="/Pages/Elements/GlobalPartials/_ConversationButtonPartial.cshtml"
-             model="convModel" />
-}
-else
-{
-    <button class="btn btn-info new-conversation-button"
-            hx-post="/Elements/Index/_NewConversation"
-            hx-swap="afterend"
-            hx-include="#af-token">
-        @Consts.CREATE_CONVO_BUTTON_TEXT
-    </button>
-    @for (i = 0; i < Model.Conversations.Count; i++)
+    
+    @if (Model.Conversations.Count == 0)
     {
         var convModel = new ConversationButtonModel
+                    {
+                        HtmlId = $"Conv_Target",
+                        Url = $"/Elements/Index/_Messages"
+                    };
+        <!-- Dummy convo for future creation - just an empty message page -->
+        <partial name="/Pages/Elements/GlobalPartials/_ConversationButtonPartial.cshtml"
+        model="convModel" />
+    }
+    else
+    {
+        <form hx-post="/Elements/Index/_NewConversation"
+              hx-swap="afterend">
+              @Html.AntiForgeryToken()
+            <button class="btn btn-info new-conversation-button">
+                @Consts.CREATE_CONVO_BUTTON_TEXT
+            </button>
+        </form>
+        @for (i = 0; i < Model.Conversations.Count; i++)
         {
-            Title = @Model.Conversations[i].Title,
-            Id = $"Conv_{i}",
-            Url = $"/Elements/Index/_Messages?ConversationId={Model.Conversations[i].ConversationId}"
-        };
-        <partial 
+            var convModel = new ConversationButtonModel
+                        {
+                            Title = Model.Conversations[i].Title,
+                            HtmlId = $"Conv_{i}",
+                            DatabaseId = Model.Conversations[i].ConversationId,
+                            Url = $"/Elements/Index/_Messages?ConversationId={Model.Conversations[i].ConversationId}"
+                        };
+            <partial 
             name="/Pages/Elements/GlobalPartials/_ConversationButtonPartial.cshtml"
             model="convModel"/>
+        }
     }
+
 }
-
-

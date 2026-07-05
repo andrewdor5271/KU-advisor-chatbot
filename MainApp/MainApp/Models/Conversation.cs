@@ -6,8 +6,22 @@ namespace MainApp.Models
 {
     public class Conversation
     {
-        public int ConversationId { get; set; }
-        public String Title { get; set; } = null!;
+        private void OnChange()
+        {
+            this.LastChangeDatetime = DateTime.UtcNow;
+        }
+        public int ConversationId { get; set
+            {
+                field = value;
+                this.OnChange();
+            }
+        }
+        public String Title { get; set
+            {
+                field = value;
+                this.OnChange();
+            }
+        } = null!;
 
         public DateTime CreationDatetime { get; set; }
 
@@ -39,10 +53,14 @@ namespace MainApp.Models
                     throw new ArgumentException("Ambigous input - both identity and anon user references ids not null");
                 }
                 this.IdentityUserId = identityUserId;
+                this.AnonUserId = null;
+                this.AnonUser = null;
             }
             else
             {
                 this.AnonUserId = anonUserId;
+                this.IdentityUserId = null;
+                this.IdentityUser = null;
             }
         }
 
@@ -61,11 +79,16 @@ namespace MainApp.Models
                     throw new ArgumentException("Ambigous input - both identity and anon user references ids not null");
                 }
                 this.IdentityUser = identityUser;
+                this.AnonUserId = null;
+                this.AnonUser = null;
             }
             else
             {
                 this.AnonUser = anonUser;
+                this.IdentityUserId = null;
+                this.IdentityUser = null;
             }
+            this.OnChange();
         }
     }
 }

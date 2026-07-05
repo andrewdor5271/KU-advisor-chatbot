@@ -38,7 +38,7 @@ namespace MainApp.Infrastructure.Page
             };
         }
 
-        protected async Task LoadConversations(bool validUserCheck=true)
+        protected async Task InitializeConversationsAsync(bool validUserCheck=true)
         {
             var userType = (UserType)this.HttpContext.Items[Consts.AUTH_CONTEXT_USER_TYPE_KEY]!;
             if(userType == UserType.None)
@@ -63,6 +63,34 @@ namespace MainApp.Infrastructure.Page
                 var identityUser = (IdentityUser)HttpContext.Items[Consts.AUTH_CONTEXT_IDENTITY_USER_KEY]!;
                 this.Conversations = await this._conversationsService.GetForIdentityUserAsync(identityUser.Id);
             }
+        }
+
+        protected async Task<Conversation> LoadConversationAsync(int conversationId)
+        {
+            var userType = (UserType)this.HttpContext.Items[Consts.AUTH_CONTEXT_USER_TYPE_KEY]!;
+            Conversation convo = await this._conversationsService.GetAsync(conversationId) ??
+                throw new InvalidOperationException($"Cannot fetch the conversation if={conversationId}");
+
+            if (userType == UserType.AnonUser)
+            {
+                var anonUser = (AnonUser)this.HttpContext.Items[Consts.AUTH_CONTEXT_ANON_USER_KEY]!;
+
+                if (convo.AnonUserId == null || anonUser.AnonUserId != convo.AnonUserId)
+                {
+                    throw new UnauthorizedAccessException($"Anon user with id={anonUser.AnonUserId} doesn't match the convo with id={convo.ConversationId}");
+                }
+            }
+            else if (userType == UserType.IdentityUser)
+            {
+                var identityUser = (IdentityUser)HttpContext.Items[Consts.AUTH_CONTEXT_IDENTITY_USER_KEY]!;
+
+                if (convo.IdentityUserId == null || identityUser.Id != convo.IdentityUserId)
+                {
+                    throw new UnauthorizedAccessException($"Identity user with id={identityUser.Id} doesn't match the convo with id={convo.ConversationId}");
+                }
+            }
+
+            return convo;
         }
     }
 }

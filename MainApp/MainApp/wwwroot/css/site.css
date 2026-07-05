@@ -55,3 +55,19 @@ footer {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.sidebar-button {
+    display: block;
+    min-width: 12rem;
+    margin: 0.1rem 0.2rem 0.2rem 0.2rem;
+    padding: 0.3rem 0.2rem 0.3rem 0.3rem;
+    border-radius: 0.4rem;
+}
+
+    .sidebar-button.active {
+        background-color: #D3D3D3;
+    }
+
+    .sidebar-button:not(.active):hover {
+        background-color: #D3D3D3;
+    }

@@ -4,14 +4,14 @@
     ViewData["Title"] = "Home page";
 }
 
-<!-- conversation-created is a custom event triggered by return of _NewMessage -->
+<!-- conversation-change is a custom event triggered by return of _NewMessage -->
 <div class="layout-spacer">
     <div id="sidebar" class="sidebar">
         <partial name="/Pages/Elements/GlobalPartials/_SidebarHeaderPartial.cshtml"/>
         <div id ="conversation-container"
              class="conversation-container"
              hx-get="/Elements/Index/_Conversations"
-             hx-trigger="load, conversation-created from:body">
+             hx-trigger="load, conversation-change from:body">
             <!-- User will be loaded by BimodalCheckAuthentication -->
         </div>
         <div class="sidebar-footer">

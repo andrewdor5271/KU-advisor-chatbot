@@ -13,6 +13,12 @@ namespace MainApp.Infrastructure.Conversations
             this._db = db;
         }
 
+        public async Task AddAsync(Conversation convo)
+        {
+            this._db.Conversations.Add(convo);
+            await this._db.SaveChangesAsync();
+        }
+
         public async Task<Conversation> CreateForAnonAsync(int anonId, String title)
         {
             var creationTime = DateTime.UtcNow;

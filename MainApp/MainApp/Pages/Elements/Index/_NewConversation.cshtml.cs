@@ -17,7 +17,7 @@ namespace MainApp.Pages.Elements.Index
         {
         }
 
-        public async Task<IActionResult> OnPostAsync(String? title)
+        public async Task<IActionResult> OnPostAsync()
         { 
             return Page();
         }

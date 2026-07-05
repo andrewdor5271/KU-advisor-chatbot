@@ -9,6 +9,7 @@ namespace MainApp.Infrastructure.Conversations
         Task<Conversation> CreateForIdentityAsync(String identityId, String title);
 
         Task<Conversation?> GetAsync(int conversationId);
+        Task AddAsync(Conversation convo);
 
         Task<List<Conversation>> GetForAnonUserAsync(int anonId);
         Task<List<Conversation>> GetForIdentityUserAsync(String identityId);

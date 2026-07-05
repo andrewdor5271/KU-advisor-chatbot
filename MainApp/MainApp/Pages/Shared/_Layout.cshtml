@@ -48,6 +48,27 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <!-- Script for ensuring that active navbuttons don't trigger htmx -->
+    <script>
+        document.body.addEventListener("htmx:configRequest", function (evt) {
+            if (evt.target.classList.contains("active") && evt.target.classList.contains("sidebar-button")) {
+                evt.preventDefault();
+            }
+        });
+        document.addEventListener("click", function (e) {
+            const button = e.target.closest(".sidebar-button");
+            if (!button){
+                return;
+            }
+
+            document.querySelectorAll(".sidebar-button.active")
+                .forEach(b => b.classList.remove("active"));
+
+            button.classList.add("active");
+        });
+
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

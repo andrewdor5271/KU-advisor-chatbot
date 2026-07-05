@@ -1,9 +1,34 @@
 ﻿@model ConversationButtonModel
 
+<div id="af-token" display="hidden">
+    @Html.AntiForgeryToken()
+</div>
+
 <div class="sidebar-button"
-     id="@Model.Id"
+     id="@Model.HtmlId"
      hx-get="@Model.Url"
      hx-target="#chatbox-container"
      hx-trigger="click">
-    @Model.Title
+     
+     
+     <!-- Check if we should allow renaming -->
+     @if(Model.DatabaseId != null){
+        // This thing activates on doubleclick to enable renaming
+        <form hx-post="Elements/Index/_Conversations?handler=Rename"
+              hx-vals='{"conversationId" : @Model.DatabaseId}'>
+            @Html.AntiForgeryToken()
+            <input class="conversation-title"
+                   name="title"
+                   value="@Model.Title"
+                   readonly
+                   ondblclick="this.readOnly=false; this.focus(); this.select();"
+               
+                   onblur="this.readOnly = true;">
+        </form>
+     }
+     else
+     {
+         <!-- For dummy convo -->
+        <span>@Model.Title</span>
+     }
 </div>

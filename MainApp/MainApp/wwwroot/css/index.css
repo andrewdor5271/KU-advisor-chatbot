@@ -107,30 +107,31 @@
     min-height: 0;
 }
 
-.sidebar-button {
-    display: block;
-
-    min-width: 12rem;
-    
-    margin: 0.1rem 0.2rem 0.2rem 0.2rem;
-    padding: 0.3rem 0.2rem 0.3rem 0.3rem;
-    border-radius: 0.4rem;
-}
-
-    .sidebar-button.active {
-        background-color: #D3D3D3;
-    }
-
-.sidebar-button:not(.active):hover {
-    background-color: #D3D3D3;
-}
-
 .new-conversation-button {
     min-width: 12rem;
     margin: 0.3rem 0.2rem 0.2rem 0.2rem;
     padding: 0.3rem 0.2rem 0.3rem 0.3rem;
     border-radius: 0.4rem;
 }
+
+.conversation-title {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    width: 100%;
+    cursor: pointer;
+}
+
+    .conversation-title[readonly] {
+        caret-color: transparent;
+    }
+
+    .conversation-title:not([readonly]) {
+        border: 1px solid #ccc;
+        background: white;
+    }
 
 .user-box {
     display: flex;

@@ -28,7 +28,7 @@ namespace MainApp.Pages.Elements.Index
                 this.DummyConvoFlag = true;
                 // We need to seriously rearrange the whole page if we create a new convo
                 // Thus, we send back an event - so a lot of HTMX is triggered
-                Response.Headers.Append("HX-Trigger", "conversation-created");
+                Response.Headers.Append("HX-Trigger", "conversation-change");
                 if (userType == UserType.AnonUser)
                 {
                     var anonUser = (AnonUser)HttpContext.Items[Consts.AUTH_CONTEXT_ANON_USER_KEY]!;
