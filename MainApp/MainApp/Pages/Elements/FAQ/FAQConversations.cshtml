@@ -1,6 +1,39 @@
-﻿@page
+@page
 @model MainApp.Pages.Elements.FAQ.FAQConversationsModel
 @{
     Layout = null;
 }
 
+@if (Model.FAQConversations.Count == 0)
+{
+    <div class="faq-empty">
+        <h2>No FAQ chats found</h2>
+        @if (string.IsNullOrWhiteSpace(Model.Search))
+        {
+            <p>Use the chat menu on the main page to add useful conversations to Frequently Asked Questions.</p>
+        }
+        else
+        {
+            var search = Model.Search;
+            <p>Nothing matches "@search". Please, try a shorter query.</p>
+        }
+    </div>
+}
+else
+{
+    <div class="faq-list">
+        @foreach (var conversation in Model.FAQConversations)
+        {
+            <button class="faq-card"
+                    type="button"
+                    hx-get="/Elements/FAQ/FAQMessages?faqConversationId=@conversation.FAQConversationId"
+                    hx-target="#faq-content"
+                    hx-swap="innerHTML">
+                <span class="faq-card-title">@conversation.Description</span>
+                <span class="faq-card-meta">
+                    Added @conversation.CreationDatetime.ToLocalTime().ToString("g")
+                </span>
+            </button>
+        }
+    </div>
+}

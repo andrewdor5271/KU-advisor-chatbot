@@ -119,6 +119,59 @@ using (var scope = app.Services.CreateScope())
                 }
             );
         db.SaveChanges();
+
+        var FaqConv1 = new MainApp.Models.FAQConversation
+        {
+            Description = "How to choose courses for the next semester",
+            CreationDatetime = DateTime.UtcNow,
+            IdentityUser = user,
+            IdentityUserId = user.Id
+        };
+        var FaqConv2 = new MainApp.Models.FAQConversation
+        {
+            Description = "Where to find advising and registration deadlines",
+            CreationDatetime = DateTime.UtcNow,
+            IdentityUser = user,
+            IdentityUserId = user.Id
+        };
+        db.FAQConversations.AddRange(FaqConv1, FaqConv2);
+        db.SaveChanges();
+
+        db.FAQMessages.AddRange(
+            new MainApp.Models.FAQMessage
+            {
+                Text = "I am not sure which electives fit my study plan.",
+                CreationDatetime = DateTime.UtcNow.AddMinutes(-8),
+                SenderType = SenderType.User,
+                FAQConversationId = FaqConv1.FAQConversationId,
+                FAQConversation = FaqConv1
+            },
+            new MainApp.Models.FAQMessage
+            {
+                Text = "Start with required courses, then use electives to cover missing credits and prerequisites. If two courses unlock later modules, prioritize those first.",
+                CreationDatetime = DateTime.UtcNow.AddMinutes(-7),
+                SenderType = SenderType.Bot,
+                FAQConversationId = FaqConv1.FAQConversationId,
+                FAQConversation = FaqConv1
+            },
+            new MainApp.Models.FAQMessage
+            {
+                Text = "Where do I check registration deadlines?",
+                CreationDatetime = DateTime.UtcNow.AddMinutes(-6),
+                SenderType = SenderType.User,
+                FAQConversationId = FaqConv2.FAQConversationId,
+                FAQConversation = FaqConv2
+            },
+            new MainApp.Models.FAQMessage
+            {
+                Text = "Use the knowledge base and the official academic calendar. For personal exceptions, contact the advising office before the add/drop period closes.",
+                CreationDatetime = DateTime.UtcNow.AddMinutes(-5),
+                SenderType = SenderType.Bot,
+                FAQConversationId = FaqConv2.FAQConversationId,
+                FAQConversation = FaqConv2
+            }
+        );
+        db.SaveChanges();
     }
 }
 
@@ -129,4 +182,3 @@ app.MapGet("/debug/routes", (EndpointDataSource endpointSource) =>
 });
 
 app.Run();
-

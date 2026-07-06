@@ -1,5 +1,43 @@
-﻿@page
+@page
 @model MainApp.Pages.Elements.FAQ.FAQMessagesModel
 @{
     Layout = null;
 }
+
+<div class="faq-chat-header">
+    <button class="btn btn-outline-secondary btn-sm"
+            type="button"
+            hx-get="/Elements/FAQ/FAQConversations"
+            hx-target="#faq-content"
+            hx-swap="innerHTML">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </button>
+    <div>
+        <h2>@Model.FAQConversation.Description</h2>
+        <span>Added @Model.FAQConversation.CreationDatetime.ToLocalTime().ToString("g")</span>
+    </div>
+</div>
+
+<div class="faq-chat">
+    @if (Model.Messages.Count == 0)
+    {
+        <div class="faq-empty">
+            <h2>This FAQ chat has no messages yet.</h2>
+            <p>The conversation shell exists, but no messages were copied into it!</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var message in Model.Messages)
+        {
+            var messageClass = message.SenderType == SenderType.User ? "sent" : "received";
+            <div class="message @messageClass">
+                <div class="msg-text">
+                    <p>@message.Text</p>
+                    <span class="time">@message.CreationDatetime.ToLocalTime().ToString("g")</span>
+                </div>
+            </div>
+        }
+    }
+</div>
