@@ -1,9 +1,4 @@
-﻿.layout-spacer {
-    display: flex;
-    width: 100dvw;
-}
-
-.chatbox-container {
+﻿.chatbox-container {
     flex: 1;
     display: flex;
     flex-direction: column;

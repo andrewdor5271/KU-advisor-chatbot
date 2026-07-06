@@ -56,6 +56,11 @@ footer {
   text-align: start;
 }
 
+.layout-spacer {
+    display: flex;
+    width: 100dvw;
+}
+
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -83,6 +88,10 @@ footer {
     padding: 0.3rem 0.2rem 0.3rem 0.3rem;
     border-radius: 0.4rem;
 }
+
+    .sidebar-button.nav{
+
+    }
 
     .sidebar-button.active {
         background-color: #D3D3D3;

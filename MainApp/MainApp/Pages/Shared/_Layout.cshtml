@@ -61,7 +61,7 @@
                 return;
             }
 
-            document.querySelectorAll(".sidebar-button.active")
+            document.querySelectorAll(".sidebar-button.nav.active:not(.nav)")
                 .forEach(b => b.classList.remove("active"));
 
             button.classList.add("active");

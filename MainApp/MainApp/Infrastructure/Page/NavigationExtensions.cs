@@ -10,7 +10,7 @@ namespace MainApp.Infrastructure.Page
             var current = context.RouteData.Values["page"]?.ToString();
             if (current == "/Index")
             {
-                return current == page || page == "/" ? "active" : "";
+                return (current == page || page == "/") ? "active" : "";
             }
             return current == page ? "active" : "";
         }

@@ -1,4 +1,29 @@
 ﻿@page
 @model MainApp.Pages.FAQModel
 @{
+    ViewData["Title"] = "FAQ";
 }
+
+<div class="layout-spacer">
+    <div id="sidebar" class="sidebar">
+        <partial name="/Pages/Elements/GlobalPartials/_SidebarHeaderPartial.cshtml" />
+    </div>
+    <div>
+        <!-- Add the "at" symbol before riz for the link to work, asp net core wouldn't let me -->
+        <!-- https://bootstrapexamples.com/riz-mohammad/search-bar-examples-with-boostrap-5 -->
+        <div class="mb-4">
+            <h4>Search Bar with Icon</h4>
+            <form class="d-flex">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div>
+
+        </div>
+    </div>
+</div>

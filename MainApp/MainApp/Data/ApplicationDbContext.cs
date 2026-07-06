@@ -13,6 +13,9 @@ namespace MainApp.Data
         public DbSet<Message> Messages => Set<Message>();
         public DbSet<AnonUser> AnonUsers => Set<AnonUser>();
 
+        public DbSet<FAQConversation> FAQConversations => Set<FAQConversation>();
+        public DbSet<FAQMessage> FAQMessages => Set<FAQMessage>();
+
         // this is the constraints galore generator
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -63,6 +66,20 @@ namespace MainApp.Data
             .HasOne(t => t.AnonUser)
             .WithMany()
             .HasForeignKey(t => t.AnonUserId);
+
+            // relation between FAQConversation and FAQMessage
+            builder.Entity<FAQMessage>()
+            .HasOne(t => t.FAQConversation)
+            .WithMany()
+            .HasForeignKey(t => t.FAQConversationId)
+            .IsRequired();
+
+            // relation between IdentityUser and FAQConversation
+            builder.Entity<FAQConversation>()
+            .HasOne(t => t.IdentityUser)
+            .WithMany()
+            .HasForeignKey(t => t.IdentityUserId)
+            .IsRequired();
         }
 
 
