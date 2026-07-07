@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MainApp.Pages.Elements.Index
 {
@@ -171,10 +172,12 @@ namespace MainApp.Pages.Elements.Index
                     }
                 }
             }
-            finally
+            catch(Exception e)
             {
-                await Response.WriteAsync("event: error\ndata: {}\n\n");
+                // CHANGE BEFORE PROD
+                await Response.WriteAsync($"event: error\ndata: {e.Message}\n\nevent: done\ndata:");
                 await Response.Body.FlushAsync();
+                throw;
             }
             return new EmptyResult();
         }

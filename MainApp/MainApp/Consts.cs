@@ -18,7 +18,7 @@
         public static string NonEmptyStringConstraint(String VarName)
         {
             // to be changed with the db - SQL Syntax varies
-            return $"LEN(LTRIM(RTRIM({VarName}))) > 0";
+            return $"length(trim(\"{VarName}\")) > 0";
         }
     }
 

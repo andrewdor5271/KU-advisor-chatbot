@@ -9,8 +9,14 @@ from dotenv import load_dotenv
 
 from grpc_custom import mainapp_llmworker_pb2
 from grpc_custom import mainapp_llmworker_pb2_grpc
-import pyodbc # TEST
+import psycopg # postgres
 
+DB_CONN_STRING = """host=localhost
+                    port=5432
+                    dbname=DigitalProject
+                    user=postgres
+                    password=H0MEeQP5pwH&nV2pyj
+                    sslmode=disable"""
 # load_dotenv("/home/user1/.env")
 
 # sys.path.insert(0, "src")
@@ -22,25 +28,26 @@ class LlmWorker(mainapp_llmworker_pb2_grpc.MessageServiceServicer):
         self._agent = agent
 
     async def GenerateReply(self, request, context):
+        MESSAGE_FIELDS = {
+            "MessageId": 0,
+            "Text": 1,
+            "CreationDatetime": 2,
+            "SenderType": 3,
+            "ConversationId": 4,
+        }
         LLM_CONTEXT_COUNT = 50
         conv_id = request.conversation_id
 
-        conn = pyodbc.connect(
-            "Driver={ODBC Driver 18 for SQL Server};" +
-            "Server=(localdb)\\mssqllocaldb;" +
-            "Database=aspnet-MainApp-5d5e236b-7012-4b0d-8144-625083f936f3;" +
-            "Trusted_Connection=yes;"
-        )
-        cursor = conn.cursor()
-
-        cursor.execute(f"""
-                       SELECT TOP ({LLM_CONTEXT_COUNT}) *
-                       FROM Messages
-                       WHERE ConversationId = ?
-                       ORDER BY MessageId DESC;""",
-                       conv_id)
-        messages = cursor.fetchall() # the last message is assumed to be the target
-        if messages[0].SenderType == 1: # the last message is sent by the bot
+        conn = psycopg.connect(DB_CONN_STRING)
+        with conn.cursor() as cursor:
+            cursor.execute(f"""SELECT *
+                               FROM "Messages"
+                               WHERE "ConversationId" = %s
+                               ORDER BY "MessageId" DESC
+                               LIMIT {LLM_CONTEXT_COUNT};""",
+                           (conv_id,))
+            messages = cursor.fetchall() # the last message is assumed to be the target
+        if messages[0][MESSAGE_FIELDS["SenderType"]] == 1: # the last message is sent by the bot
             yield mainapp_llmworker_pb2.NewMessageChunkResponse(
                 error=mainapp_llmworker_pb2.Error(
                     message="Last message by a bot"
@@ -49,12 +56,12 @@ class LlmWorker(mainapp_llmworker_pb2_grpc.MessageServiceServicer):
             )
             return
 
-        message = messages[0].Text
-        history = [x.Text for x in messages[1:]]
+        messageText = messages[0][MESSAGE_FIELDS["Text"]]
+        history = [x[MESSAGE_FIELDS["Text"]] for x in messages[1:]]
         full_text = ""
         # self._agent.request(message, history)
         # async
-        for token in message: # temporary for testing
+        for token in messageText: # temporary for testing
             yield mainapp_llmworker_pb2.NewMessageChunkResponse(
                 token=mainapp_llmworker_pb2.TokenChunk(
                     text=token
@@ -81,7 +88,7 @@ async def serve():
 
     await server.start()
     await server.wait_for_termination()
-    
+
 '''async def run_query(
     agent: LLMAgent, 
     message: str, 

@@ -26,3 +26,5 @@ typing-extensions>=4.10.0
 
 grpcio
 grpcio-tools
+
+psycopg[binary]

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DevPostgresConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
@@ -103,7 +103,7 @@ using (var scope = app.Services.CreateScope())
                 new MainApp.Models.Message
                 {
                     Text = $"Test {i + 1}",
-                    CreationDatetime = DateTime.Now,
+                    CreationDatetime = DateTime.UtcNow,
                     SenderType = i % 2 == 0 ? SenderType.User: SenderType.Bot,
                     ConversationId = Conv1.ConversationId
                 }
@@ -113,14 +113,14 @@ using (var scope = app.Services.CreateScope())
                 new MainApp.Models.Message
                 {
                     Text = "aga",
-                    CreationDatetime = DateTime.Now,
+                    CreationDatetime = DateTime.UtcNow,
                     SenderType = SenderType.User,
                     ConversationId = Conv2.ConversationId
                 },
                 new MainApp.Models.Message
                 {
                     Text = "ogo",
-                    CreationDatetime = DateTime.Now,
+                    CreationDatetime = DateTime.UtcNow,
                     SenderType = SenderType.Bot,
                     ConversationId = Conv2.ConversationId
                 }
