@@ -137,40 +137,45 @@ namespace MainApp.Pages.Elements.Index
             Response.Headers.Append("Cache-Control", "no-cache");
             Response.Headers.Append("Connection", "keep-alive");
 
-            await foreach (var responseChunk in call.ResponseStream.ReadAllAsync())
+            try
             {
-                if (responseChunk.ConversationId != conversationId)
+                await foreach (var responseChunk in call.ResponseStream.ReadAllAsync())
                 {
-                    await Response.WriteAsync("event: error\ndata: {}\n\n");
-                    await Response.Body.FlushAsync();
-                    break;
-                }
-                switch (responseChunk.EventCase)
-                {
-                    case NewMessageChunkResponse.EventOneofCase.Token:
-                        textBuffer += responseChunk.Token.Text;
-                        break;
-                    case NewMessageChunkResponse.EventOneofCase.Completion:
-                        await Response.WriteAsync("event: done\ndata: {}\n\n");
+                    if (responseChunk.ConversationId != conversationId)
+                    {
+                        await Response.WriteAsync("event: error\ndata: {}\n\n");
                         await Response.Body.FlushAsync();
-                        await this.SaveBotMessageAsync(conversationId, responseChunk.Completion.FullText);
-                        return new EmptyResult();
-                    case NewMessageChunkResponse.EventOneofCase.Error:
                         break;
-                }
+                    }
+                    switch (responseChunk.EventCase)
+                    {
+                        case NewMessageChunkResponse.EventOneofCase.Token:
+                            textBuffer += responseChunk.Token.Text;
+                            break;
+                        case NewMessageChunkResponse.EventOneofCase.Completion:
+                            cumulativeText += textBuffer;
+                            await Response.WriteAsync($"event: chunk\ndata: {cumulativeText}\n\nevent: done\ndata: {{}}\n\n");
+                            await Response.Body.FlushAsync();
+                            await this.SaveBotMessageAsync(conversationId, responseChunk.Completion.FullText);
+                            return new EmptyResult();
+                        case NewMessageChunkResponse.EventOneofCase.Error:
+                            break;
+                    }
 
-                if(textBuffer.Length >= Consts.TEXT_CHUNK_FLUSH_LENGTH)
-                {
-                    cumulativeText += textBuffer;
-                    await Response.WriteAsync($"event: chunk\ndata: {cumulativeText}\n\n");
-                    await Response.Body.FlushAsync();
-                    textBuffer = "";
+                    if (textBuffer.Length >= Consts.TEXT_CHUNK_FLUSH_LENGTH)
+                    {
+                        cumulativeText += textBuffer;
+                        await Response.WriteAsync($"event: chunk\ndata: {cumulativeText}\n\n");
+                        await Response.Body.FlushAsync();
+                        textBuffer = "";
+                    }
                 }
             }
-
-
-            await Response.WriteAsync("event: error\ndata: {}\n\n");
-            await Response.Body.FlushAsync();
+            finally
+            {
+                await Response.WriteAsync("event: error\ndata: {}\n\n");
+                await Response.Body.FlushAsync();
+            }
             return new EmptyResult();
         }
     }
