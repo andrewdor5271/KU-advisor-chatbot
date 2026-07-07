@@ -19,7 +19,7 @@
     {
         <div class="msg-page"
              id="msg-page"
-             hx-get="/Elements/Index/_MessageBatch?ConversationId=@Model.ConversationId"
+             hx-get="/Elements/Index/_MessageBatch?ConversationId=@Model.ConversationId&checkForResponse=true"
              hx-trigger="intersect root:#chatbox-container once">
         </div>
     }

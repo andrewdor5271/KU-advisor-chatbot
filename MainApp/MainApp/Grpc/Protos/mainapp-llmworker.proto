@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "MainApp.Grpc.Protos";
+
+service MessageService {
+  rpc GenerateReply (NewMessageRequest) returns (stream NewMessageChunkResponse);
+}
+
+message NewMessageRequest {
+  int32 conversation_id = 1;
+}
+
+message TokenChunk {
+  string text = 1;
+}
+
+message Completion {
+  string full_text = 1;
+}
+
+message Error {
+  string message = 1;
+}
+
+message NewMessageChunkResponse { // streamed response - 1 per n tokens and one at the end
+  oneof event { // only one of the following is included
+    TokenChunk token = 1; // when in progress, output token difference
+    Completion completion = 2; // when done, send completion with the whole text and close the stream
+    Error error = 3; // if something goes wrong, send this and close the stream (with an error?)
+  }
+  int32 conversation_id = 4;
+}

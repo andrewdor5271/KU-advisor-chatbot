@@ -11,13 +11,15 @@ namespace MainApp.Pages.Elements.Index
     public class MessageBatchPageModel : BimodalAuthMessagePageModel
     {
         public List<Message> Messages { get; private set; } = null!;
+        public Message ResponseMessage { get; private set; } = null!;
         public int ConversationId { get; private set; }
+        public bool CheckForResponse { get; private set; }
         public int? LastLoadedMessageId { get; private set; } = null;
         public MessageBatchPageModel(ApplicationDbContext db) : base(db)
         {
         }
 
-        public async Task<IActionResult> OnGetAsync(int conversationId, int? previousMessageId)
+        public async Task<IActionResult> OnGetAsync(int conversationId, int? previousMessageId, bool checkForResponse=false)
         {
             if(!await this.CheckMessagesSecurityAsync(conversationId))
             {
@@ -25,6 +27,7 @@ namespace MainApp.Pages.Elements.Index
             }
 
             this.ConversationId = conversationId;
+            this.CheckForResponse = checkForResponse;
 
             var Query = _db.Messages.Where(t => t.ConversationId == conversationId);
             if (previousMessageId != null)
@@ -36,6 +39,12 @@ namespace MainApp.Pages.Elements.Index
                 .OrderByDescending(t => t.MessageId) // We want the newest message to be the first because of css column reversal shit
                 .Take(Consts.MESSAGE_BATCH_SIZE)
                 .ToListAsync();
+            this.ResponseMessage = new Message
+            {
+                ConversationId = conversationId,
+                SenderType = SenderType.Bot,
+                CreationDatetime = DateTime.UtcNow,
+            };
 
             if (Messages.Count > 0)
             {

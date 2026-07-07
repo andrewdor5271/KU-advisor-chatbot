@@ -1,5 +1,6 @@
 using MainApp;
 using MainApp.Data;
+using MainApp.Grpc.Protos;
 using MainApp.Infrastructure.Conversations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+builder.Services.AddGrpcClient<MessageService.MessageServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["Grpc:MainappLlmworker"]!);
+});
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();

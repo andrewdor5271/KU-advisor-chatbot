@@ -4,14 +4,18 @@
     Layout = null;
 }
 
+<!-- WARNING: Reverse order due to messages css - from bottom to top -->
 @if (!Model.DummyConvoFlag)
 {
+    <partial name="/Pages/Elements/Index/_ResponsePartial.cshtml" model="@Model.ReceivedMessage" />
+
     <div class="message sent">
         <div class="msg-text">
             <p>
-                @Model.Message.Text
+                @Model.ReceivedMessage.Text
             </p>
-            <span class="time">@Model.Message.CreationDatetime </span>
+            <span class="time">@Model.ReceivedMessage.CreationDatetime </span>
         </div>
     </div>
+
 }
