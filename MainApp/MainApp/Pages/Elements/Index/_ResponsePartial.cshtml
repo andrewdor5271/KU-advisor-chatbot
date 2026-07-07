@@ -1,0 +1,14 @@
+﻿@model MainApp.Models.Message
+
+
+<div class="message received">
+    <div class="msg-text">
+        <p hx-ext="sse"
+           sse-swap="chunk"
+           sse-connect="/Elements/Index/_NewMessage?handler=Response&conversationId=@Model.ConversationId"
+           sse-close="done">
+
+        </p>
+        <span class="time">@Model.CreationDatetime </span>
+    </div>
+</div>

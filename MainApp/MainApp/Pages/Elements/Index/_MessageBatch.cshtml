@@ -4,6 +4,17 @@
     Layout = null;
 }
 
+<!-- WARNING: Reverse order due to messages css - from bottom to top -->
+
+@if (Model.CheckForResponse &&
+    Model.Messages.Count > 0 &&
+    Model.Messages.First().SenderType == SenderType.User)
+{
+    // If we didn't get a message reply after sending
+    // happens on conversation initialization after the first message
+    <partial name="/Pages/Elements/Index/_ResponsePartial.cshtml" model="@Model.ResponseMessage" />
+}
+
 @foreach (var message in Model.Messages)
 {
     @if (message.SenderType == SenderType.User)
@@ -29,6 +40,7 @@
         </div>
     }
 }
+
 
 @if (Model.LastLoadedMessageId != null)
 {

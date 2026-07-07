@@ -35,6 +35,8 @@
 
         public const string DUMMY_CONVO_DEFAULT_TITLE = "New conversation";
         public const string CREATE_CONVO_BUTTON_TEXT = "Add conversation";
+
+        public const int TEXT_CHUNK_FLUSH_LENGTH = 10;
     }
 }
 
