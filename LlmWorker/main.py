@@ -4,12 +4,16 @@ import asyncio
 import sys
 import time
 import statistics
+import grpc
 from dotenv import load_dotenv
+
+from grpc import mainapp_llmworker_pb2
+from grpc import mainapp_llmworker_pb2_grpc
 
 load_dotenv("/home/user1/.env")
 
 sys.path.insert(0, "src")
-from rag_agent import LLMAgent
+from src.rag_agent import LLMAgent
 
 
 async def run_query(

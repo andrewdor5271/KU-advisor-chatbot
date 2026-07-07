@@ -3,12 +3,12 @@
 import asyncio
 from typing import AsyncGenerator
 
-from services.llm_service import LLMService
-from services.dense_embedding_service import EmbeddingService
-from services.sparse_embedding_service import SparseEmbeddingService
-from services.reranker_service import RerankerService
-from modules.qdrant_hybrid_retrieval import HybridRetrievalModule
-from modules.context_builder import build_context
+from src.services.llm_service import LLMService
+from src.services.dense_embedding_service import EmbeddingService
+from src.services.sparse_embedding_service import SparseEmbeddingService
+from src.services.reranker_service import RerankerService
+from src.modules.qdrant_hybrid_retrieval import HybridRetrievalModule
+from src.modules.context_builder import build_context
 
 
 class RAGPipeline:

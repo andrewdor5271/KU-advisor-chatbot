@@ -1,6 +1,6 @@
 # src/modules/context_builder.py
 
-from services.reranker_service import RerankedChunk
+from src.services.reranker_service import RerankedChunk
 
 SYSTEM_PROMPT = """\
 You are a precise and helpful university information assistant.

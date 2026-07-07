@@ -6,7 +6,7 @@ import asyncio
 from dataclasses import dataclass
 from dotenv import load_dotenv
 
-from modules.qdrant_hybrid_retrieval import RetrievedChunk
+from src.modules.qdrant_hybrid_retrieval import RetrievedChunk
 
 load_dotenv()
 

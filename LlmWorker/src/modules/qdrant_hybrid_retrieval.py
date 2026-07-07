@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 from qdrant_client import AsyncQdrantClient
 from qdrant_client import models
 
-from services.dense_embedding_service import QueryVectors
-from services.sparse_embedding_service import QuerySparseVectors
+from src.services.dense_embedding_service import QueryVectors
+from src.services.sparse_embedding_service import QuerySparseVectors
 
 load_dotenv()
 
