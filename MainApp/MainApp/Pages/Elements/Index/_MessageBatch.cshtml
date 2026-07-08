@@ -15,6 +15,7 @@
     <partial name="/Pages/Elements/Index/_ResponsePartial.cshtml" model="@Model.ResponseMessage" />
 }
 
+
 @foreach (var message in Model.Messages)
 {
     @if (message.SenderType == SenderType.User)
@@ -33,7 +34,7 @@
         <div class="message received">
             <div class="msg-text">
                 <p>
-                    @message.Text
+                    @Html.Raw(@message.Text)
                 </p>
                 <span class="time">@message.CreationDatetime </span>
             </div>

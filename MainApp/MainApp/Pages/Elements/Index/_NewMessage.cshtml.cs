@@ -1,3 +1,4 @@
+using Ganss.Xss;
 using Grpc.Core;
 using MainApp.Data;
 using MainApp.Grpc.Protos;
@@ -11,12 +12,118 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Text.RegularExpressions;
 
 namespace MainApp.Pages.Elements.Index
 {
     [BimodalAuthentify]
     public class NewMessagePageModel : BimodalAuthMessagePageModel
     {
+        class TokenRagLinkParser
+        {
+            public enum ParsingState
+            {
+                Continue,
+                Finished,
+                FormatError
+            }
+
+            public String ParsingPrefix { get; private set; } = "";
+            public String ParsingPostfix { get; private set; } = "";
+
+            private ParsingState _currentState = ParsingState.Continue;
+            private const int MAX_LINK_TEXT_LENGTH = 1000; // just in case we receive an opening bracket and no closing
+            public String CumulativeText { get; private set; } = "";
+
+            private bool VerifyFormat()
+            {
+                const string REGEX = @"\[Source: .+ | Page \d\]";
+                return Regex.IsMatch(this.CumulativeText, REGEX);
+            }
+
+            public void Reset()
+            {
+                this.CumulativeText = "";
+                this.ParsingPrefix = "";
+                this.ParsingPostfix = "";
+            }
+
+            public bool IsTokenParseable(String token)
+            {
+                if(token.Contains("["))
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public string GetHtml()
+            {
+                try
+                {
+                    var elements = this.CumulativeText.Trim('[', ']').Split(" ");
+                    string url = elements[1];
+                    int pageNumber = int.Parse(elements[4]);
+                    string name = url.Split("/").Last();
+                    if (name.EndsWith(".pdf"))
+                    {
+                        url += $"#page={pageNumber}";
+                    }
+                    return GlobalStrings.RagLinkHtml(url, name);
+                }
+                catch
+                {
+                    return GlobalStrings.RagLinkHtml("", Consts.INVALID_RAG_LINK_NAME);
+                }
+            }
+
+            public ParsingState AddStep(String token, bool verifyFormatOnComplete=true)
+            {
+                String processedToken = token;
+                if (token.Contains("["))
+                {
+                    var split = processedToken.Split("[");
+                    processedToken = "[" + split[1];
+                    this.ParsingPrefix = split[0];
+                    this.CumulativeText += processedToken;
+                    return ParsingState.Continue;
+                }
+                if (token.Contains("]"))
+                {
+                    var split = processedToken.Split("]");
+                    processedToken = split[0] + "]";
+                    this.ParsingPostfix = split[1];
+                    this.CumulativeText += processedToken;
+                    
+                    if(verifyFormatOnComplete)
+                    {
+                        if (this.VerifyFormat())
+                        {
+                            _currentState = ParsingState.Finished;
+                            return ParsingState.Finished;
+                        }
+                        else
+                        {
+                            _currentState = ParsingState.FormatError;
+                            return ParsingState.FormatError;
+                        }
+                    }
+                    else
+                    {
+                        _currentState = ParsingState.Finished;
+                        return ParsingState.Finished;
+                    }
+                }
+
+                this.CumulativeText += token;
+                if(this.CumulativeText.Length > TokenRagLinkParser.MAX_LINK_TEXT_LENGTH)
+                {
+                    return ParsingState.FormatError; // too long
+                }
+                return ParsingState.Continue;
+            }
+        }
+
         private readonly MessageService.MessageServiceClient _grpcService;
         private readonly IConversationsService _conversationsService;
         public Message ReceivedMessage { get; private set; } = null!;
@@ -81,12 +188,13 @@ namespace MainApp.Pages.Elements.Index
                 this.DummyConvoFlag = false;
             }
 
+            var sanitizer = new HtmlSanitizer();
             // and here we process everything that's actually not about creating new conversations
             this.ReceivedMessage = new Message
             {
                 SenderType = SenderType.User,
                 ConversationId = (int)conversationId,
-                Text = text,
+                Text = sanitizer.Sanitize(text), // we render out html stored in the db, so we need to sanitize it manually
                 CreationDatetime = DateTime.UtcNow
             };
             // Using the default message class for the model in response partial is a bad decision
@@ -129,6 +237,8 @@ namespace MainApp.Pages.Elements.Index
 
             String cumulativeText = "";
             String textBuffer = "";
+            bool isParsingLink = false;
+            var linkParser = new TokenRagLinkParser();
             var responseBodyFeature = HttpContext.Features.Get<IHttpResponseBodyFeature>(); // to disable buffering on small messages
             if (responseBodyFeature != null)
             {
@@ -144,20 +254,53 @@ namespace MainApp.Pages.Elements.Index
                 {
                     if (responseChunk.ConversationId != conversationId)
                     {
-                        await Response.WriteAsync("event: error\ndata: {}\n\n");
+                        await Response.WriteAsync("event: error\ndata: {}\n\nevent: done\ndata:");
                         await Response.Body.FlushAsync();
                         break;
                     }
                     switch (responseChunk.EventCase)
                     {
                         case NewMessageChunkResponse.EventOneofCase.Token:
-                            textBuffer += responseChunk.Token.Text;
+                            string tokenText = responseChunk.Token.Text;
+                            if (isParsingLink)
+                            {
+                                // token in the middle
+                                isParsingLink =
+                                        linkParser.AddStep(tokenText) == TokenRagLinkParser.ParsingState.Continue;
+                                if(!isParsingLink)
+                                    // last token
+                                {
+                                    textBuffer += linkParser.ParsingPrefix + linkParser.GetHtml() + linkParser.ParsingPostfix;
+                                    linkParser.Reset();
+                                }
+                            }
+                            else
+                            {
+                                if (linkParser.IsTokenParseable(tokenText))
+                                {
+                                    // first token
+                                    isParsingLink = 
+                                        linkParser.AddStep(tokenText) == TokenRagLinkParser.ParsingState.Continue;
+                                    if (!isParsingLink) // the first and the last token
+                                    {
+                                        textBuffer += linkParser.ParsingPrefix + linkParser.GetHtml() + linkParser.ParsingPostfix;
+                                        linkParser.Reset();
+                                    }
+                                }
+                                else
+                                {
+                                    // not parsing
+                                    textBuffer += responseChunk.Token.Text;
+                                }
+                            }
+                            
                             break;
                         case NewMessageChunkResponse.EventOneofCase.Completion:
                             cumulativeText += textBuffer;
                             await Response.WriteAsync($"event: chunk\ndata: {cumulativeText}\n\nevent: done\ndata: {{}}\n\n");
                             await Response.Body.FlushAsync();
-                            await this.SaveBotMessageAsync(conversationId, responseChunk.Completion.FullText);
+                            await this.SaveBotMessageAsync(conversationId, cumulativeText); // using cumulativeText
+                            // instead of the full text in the response bc citations are rendered 
                             return new EmptyResult();
                         case NewMessageChunkResponse.EventOneofCase.Error:
                             break;

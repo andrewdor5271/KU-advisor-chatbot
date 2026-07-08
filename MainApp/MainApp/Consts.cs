@@ -20,6 +20,11 @@
             // to be changed with the db - SQL Syntax varies
             return $"length(trim(\"{VarName}\")) > 0";
         }
+
+        public static string RagLinkHtml(string url, string name)
+        {
+            return $"<a class='rag-inline-link' href='{url}'>{name}</a>";
+        }
     }
 
     public static class Consts
@@ -37,6 +42,8 @@
         public const string CREATE_CONVO_BUTTON_TEXT = "Add conversation";
 
         public const int TEXT_CHUNK_FLUSH_LENGTH = 10;
+
+        public const string INVALID_RAG_LINK_NAME = "Invalid citation";
     }
 }
 

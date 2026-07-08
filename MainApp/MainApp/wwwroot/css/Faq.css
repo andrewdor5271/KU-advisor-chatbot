@@ -1,0 +1,126 @@
+﻿.user-box {
+    display: flex;
+    font-size: 1.1rem;
+    align-items: center
+}
+
+.faq-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    min-width: 0;
+    padding: 1.5rem;
+    background: #f7f8fa;
+}
+
+.faq-toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.faq-title {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+
+.faq-subtitle {
+    margin: 0.25rem 0 0;
+    color: #667085;
+}
+
+.faq-search {
+    width: min(28rem, 45%);
+}
+
+.faq-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.faq-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.faq-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #d9dee7;
+    border-radius: 0.5rem;
+    background: white;
+    text-align: left;
+}
+
+    .faq-card:hover {
+        border-color: #9db7d8;
+        background: #f9fbff;
+    }
+
+.faq-card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.faq-card-meta,
+.faq-chat-header span {
+    color: #667085;
+    font-size: 0.85rem;
+}
+
+.faq-chat-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+    .faq-chat-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+.faq-chat {
+    border: 1px solid #d9dee7;
+    border-radius: 0.5rem;
+    background: white;
+    padding: 0 0.75rem 0.75rem;
+}
+
+.faq-empty {
+    border: 1px dashed #c7ced8;
+    border-radius: 0.5rem;
+    background: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+    .faq-empty h2 {
+        margin: 0 0 0.4rem;
+        font-size: 1.25rem;
+    }
+
+    .faq-empty p {
+        margin: 0;
+        color: #667085;
+    }
+
+@media (max-width: 768px) {
+    .faq-toolbar {
+        flex-direction: column;
+    }
+
+    .faq-search {
+        width: 100%;
+    }
+}

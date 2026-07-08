@@ -34,7 +34,7 @@
             var messageClass = message.SenderType == SenderType.User ? "sent" : "received";
             <div class="message @messageClass">
                 <div class="msg-text">
-                    <p>@message.Text</p>
+                    <p>@Html.Raw(@message.Text)</p>
                     <span class="time">@message.CreationDatetime.ToLocalTime().ToString("g")</span>
                 </div>
             </div>
