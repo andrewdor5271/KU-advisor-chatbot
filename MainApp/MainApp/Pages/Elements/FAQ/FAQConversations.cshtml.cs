@@ -25,12 +25,12 @@ namespace MainApp.Pages.Elements.FAQ
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                var normalizedSearch = search.Trim();
+                var normalizedSearch = search.Trim().ToLower();
                 query = query.Where(conversation =>
-                    conversation.Description.Contains(normalizedSearch) ||
+                    conversation.Description.ToLower().Contains(normalizedSearch) ||
                     _db.FAQMessages.Any(message =>
                         message.FAQConversationId == conversation.FAQConversationId &&
-                        message.Text.Contains(normalizedSearch)));
+                        message.Text.ToLower().Contains(normalizedSearch)));
             }
 
             FAQConversations = await query
