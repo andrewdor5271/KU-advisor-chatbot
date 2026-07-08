@@ -7,7 +7,9 @@
            sse-swap="chunk"
            sse-connect="/Elements/Index/_NewMessage?handler=Response&conversationId=@Model.ConversationId"
            sse-close="done">
-
+            <span class="spinner-border" role="status">
+                
+            </span>
         </p>
         <span class="time">@Model.CreationDatetime </span>
     </div>

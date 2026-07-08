@@ -17,14 +17,14 @@ DB_CONN_STRING = """host=localhost
                     user=postgres
                     password=H0MEeQP5pwH&nV2pyj
                     sslmode=disable"""
-# load_dotenv("/home/user1/.env")
+load_dotenv("/home/user1/.env")
 
-# sys.path.insert(0, "src")
+sys.path.insert(0, "src")
 from src.rag_agent import LLMAgent
 
 class LlmWorker(mainapp_llmworker_pb2_grpc.MessageServiceServicer):
     _agent: LLMAgent
-    def __init__(self, agent: LLMAgent = None):
+    def __init__(self, agent: LLMAgent):
         self._agent = agent
 
     async def GenerateReply(self, request, context):
@@ -59,9 +59,7 @@ class LlmWorker(mainapp_llmworker_pb2_grpc.MessageServiceServicer):
         messageText = messages[0][MESSAGE_FIELDS["Text"]]
         history = [x[MESSAGE_FIELDS["Text"]] for x in messages[1:]]
         full_text = ""
-        # self._agent.request(message, history)
-        # async
-        for token in messageText: # temporary for testing
+        async for token in self._agent.request(messageText, history): # temporary for testing
             yield mainapp_llmworker_pb2.NewMessageChunkResponse(
                 token=mainapp_llmworker_pb2.TokenChunk(
                     text=token
@@ -79,8 +77,9 @@ class LlmWorker(mainapp_llmworker_pb2_grpc.MessageServiceServicer):
 async def serve():
     server = grpc.aio.server()
 
+    agent = await LLMAgent.create()
     mainapp_llmworker_pb2_grpc.add_MessageServiceServicer_to_server(
-        LlmWorker(),
+        LlmWorker(agent),
         server
     )
 
@@ -88,47 +87,6 @@ async def serve():
 
     await server.start()
     await server.wait_for_termination()
-
-'''async def run_query(
-    agent: LLMAgent, 
-    message: str, 
-    history: list[str] | None = None, 
-    silent: bool = True
-):
-    start = time.perf_counter()
-    
-    token_count = 0
-    full_response = ""
-    
-    if not silent:
-        print(f"\nUser: {message}\nAI: ", end="")
-
-    # Capture the text while streaming
-    async for token in agent.request(message, history):
-        token_count += 1
-        full_response += token
-        if not silent:
-            print(token, end="", flush=True)
-
-    if not silent:
-        print("\n")
-
-    end = time.perf_counter()
-
-    return {
-        "latency": end - start,
-        "tokens": token_count,
-        "response": full_response, # Return the text for history tracking
-    }
-
-
-async def worker(agent: LLMAgent, id: int, message: str, results: list):
-    # Keep stress test workers silent so they don't spam the Jupyter output
-    result = await run_query(agent, f"[User {id}] {message}", silent=True)
-    results.append(result)
-'''
-
-# agent = await LLMAgent.create()
-# await agent.close()
+    await agent.close()
 
 asyncio.run(serve())
